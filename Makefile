@@ -1,38 +1,25 @@
 #!Makefile
 
-TEST=test
+CC = gcc
+CFLAGS = -g -Iinclude
 
-all:main.o riscv.o memory.o fetch.o bus.o decode.o execute.o
-	gcc -g $^ -o rv_emu
+BIN = rv_emu
+C_FILES = $(wildcard src/*.c)
+OBJ_FILES = $(C_FILES:%.c=%.o)
 
-main.o:main.c
-	gcc -g -c $< -o $@
+$(BIN): $(OBJ_FILES)
+	$(CC) $(CFLAGS) $^ -o $@
 
-riscv.o:riscv.c
-	gcc -g -c $< -o $@
-
-memory.o:memory.c
-	gcc -g -c $< -o $@
-
-bus.o:bus.c
-	gcc -g -c $< -o $@
-
-fetch.o:fetch.c
-	gcc -g -c $< -o $@
-
-decode.o:decode.c
-	gcc -g -c $< -o $@
-
-execute.o:execute.c
-	gcc -g -c $< -o $@
+src/%.o: src/%.c
+	$(CC) -o $@ -c $(CFLAGS) $<
 
 check:
-	riscv32-unknown-linux-gnu-gcc -Wl,-Ttext=0x0 -nostdlib -march=rv32g -O0 $(TEST)/test.s -o $(TEST)/test.obj
-	riscv32-unknown-linux-gnu-objcopy -O binary $(TEST)/test.obj $(TEST)/test.bin
-	riscv32-unknown-linux-gnu-gcc -Wl,-Ttext=0x0 -nostdlib -march=rv32g -O0 $(TEST)/fib.c -o $(TEST)/fib.obj
-	riscv32-unknown-linux-gnu-objcopy -O binary $(TEST)/fib.obj $(TEST)/fib.bin
-	riscv32-unknown-linux-gnu-gcc -Wl,-Ttext=0x0 -nostdlib -march=rv32g -O0 $(TEST)/add.c -o $(TEST)/add.obj
-	riscv32-unknown-linux-gnu-objcopy -O binary $(TEST)/add.obj $(TEST)/add.bin
+	riscv32-unknown-linux-gnu-gcc -Wl,-Ttext=0x0 -nostdlib -march=rv32g -O0 test/test.s -o test/test.obj
+	riscv32-unknown-linux-gnu-objcopy -O binary test/test.obj test/test.bin
+	riscv32-unknown-linux-gnu-gcc -Wl,-Ttext=0x0 -nostdlib -march=rv32g -O0 test/fib.c -o test/fib.obj
+	riscv32-unknown-linux-gnu-objcopy -O binary test/fib.obj test/fib.bin
+	riscv32-unknown-linux-gnu-gcc -Wl,-Ttext=0x0 -nostdlib -march=rv32g -O0 test/add.c -o test/add.obj
+	riscv32-unknown-linux-gnu-objcopy -O binary test/add.obj test/add.bin
 
 clean:
-	rm *.o rv_emu $(TEST)/*.obj $(TEST)/*.bin
+	rm src/*.o rv_emu test/*.obj test/*.bin

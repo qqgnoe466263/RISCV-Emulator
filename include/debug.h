@@ -6,7 +6,7 @@
 #define CONFIG_DBG  1
 #define ERROR       1
 
-#define ERR(...) fprintf(stderr, __VA_ARGS__);
+#define ERR(...) fprintf(stdout, __VA_ARGS__);
 
 #ifdef CONFIG_DBG
 #define DBG(...) fprintf(stdout, __VA_ARGS__);

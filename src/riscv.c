@@ -10,28 +10,14 @@ rv_emu_t *init_rv_emu()
         return NULL;
     }
     
-    /* cpu -> bus -> mem (I-MEM, D-MEM)
-     *            -> Peripheral 
-     */
-
     /* Init CPU */
-    rv_emu->rv_cpu.pc = IMEM_BEGIN;
-    for (uint32_t i = 0; i < REG_NUM; i++)
-        rv_emu->rv_cpu.xreg[i] = 0;
-    
-    rv_emu->rv_cpu.xreg[2] = STACK_BEGIN; // sp
+    err = init_rv_cpu(&rv_emu->rv_cpu);
 
-#if CONFIG_DBG
-    DBG("[DEBUG] STACK begin : 0x%x\n", rv_emu->rv_cpu.xreg[2]);
-#endif
-   
     /* Init MEM */
-    err = init_rv_mem(rv_emu);
-    if (err)
-        return NULL;
+    err = init_rv_mem(&rv_emu->rv_mem);
 
     /* Init BUS */
-    init_rv_bus(rv_emu);
+    err = init_rv_bus(&rv_emu->rv_bus);
 
     return rv_emu;
 }
@@ -60,7 +46,7 @@ int32_t load_rv_elf(rv_emu_t *rv_emu, uint8_t *filename)
         return ERROR;
     }
 
-    rv_emu->rv_mem.elf_raw_size = file_size;
+    elf_raw_size = file_size;
 
     size_t r = fread(rv_emu->rv_mem.mem_base, 1, file_size, f);
     fclose(f);

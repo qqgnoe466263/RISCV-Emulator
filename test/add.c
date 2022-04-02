@@ -10,6 +10,6 @@ int main()
     e = a + b;
     f = c + d;
 
-    return 0;
+    return (e + f);
 }
 
