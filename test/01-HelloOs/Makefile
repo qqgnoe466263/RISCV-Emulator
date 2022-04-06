@@ -10,6 +10,7 @@ all: os.elf
 
 os.elf: start.s os.c
 	$(CC) $(CFLAGS) -T os.ld -o os.elf $^
+	riscv32-unknown-linux-gnu-objcopy -O binary os.elf os.bin
 
 qemu: $(TARGET)
 	@qemu-system-riscv32 -M ? | grep virt >/dev/null || exit

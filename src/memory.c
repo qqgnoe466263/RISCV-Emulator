@@ -21,7 +21,7 @@ uint32_t read_rv_mem(rv_mem_t *rv_mem, uint32_t addr, uint32_t size)
     switch (size) {
     /* 1bytes */
     case 1:
-        val = *(uint8_t *)&rv_mem->mem_base[idx];
+        val = *((uint8_t *)rv_mem->mem_base + addr);
         break;
     /* 2bytes */
     case 2:
@@ -42,7 +42,7 @@ void write_rv_mem(rv_mem_t *rv_mem, uint32_t addr, uint32_t data, uint32_t size)
     switch (size) {
     /* 1bytes */
     case 1:
-        rv_mem->mem_base[idx] = (uint8_t)data;
+        *((uint8_t *)rv_mem->mem_base + addr) = (uint8_t)data;
         break;
     /* 2bytes */
     case 2:

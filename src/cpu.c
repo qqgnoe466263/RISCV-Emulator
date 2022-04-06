@@ -3,9 +3,10 @@
 
 /* CSRs Init */
 rv_csr_t rv_csr[] = {
-    [MISA]      = {0, 0},
-    [MTVEC]     = {0, 0},
     [MSTATUS]   = {0, 0},
+    [MISA]      = {0, 0},
+    [MIE]       = {0, 0},
+    [MTVEC]     = {0, 0},
     [MSCRATCH]  = {0, 0},
     [MEPC]      = {0, 0},
     [MCAUSE]    = {0, 0},
@@ -21,17 +22,13 @@ int32_t init_rv_cpu(rv_cpu_t *rv_cpu)
 
     rv_cpu->csr = rv_csr;
 
+    rv_cpu->branch_enable = 0;
+
     /* Reset the registers */
     for (uint32_t i = 0; i < REG_NUM; i++)
         rv_cpu->xreg[i] = 0;
     
     rv_cpu->exception_code = -1;
-
-    /* Set the SP */
-    rv_cpu->xreg[2] = STACK_BEGIN; // sp
-#if CONFIG_DBG
-    DBG("[DEBUG] STACK begin : 0x%x\n", rv_cpu->xreg[2]);
-#endif
 
     /* Attach the BUS interfaces */
     rv_cpu->rv_read_bus = read_bus;
@@ -53,3 +50,18 @@ void dump_reg(rv_cpu_t *rv_cpu)
     }
     printf("\n");
 }
+
+void dump_csr(rv_cpu_t *rv_cpu)
+{
+    printf("%-10s = 0x%x, \n", "MSTATUS", rv_cpu->csr[MSTATUS].value);
+    printf("%-10s = 0x%x, \n", "MISA", rv_cpu->csr[MISA].value);
+    printf("%-10s = 0x%x, \n", "MIE", rv_cpu->csr[MIE].value);
+    printf("%-10s = 0x%x, \n", "MTVEC", rv_cpu->csr[MTVEC].value);
+    printf("%-10s = 0x%x, \n", "MSCRATCH", rv_cpu->csr[MSCRATCH].value);
+    printf("%-10s = 0x%x, \n", "MEPC", rv_cpu->csr[MEPC].value);
+    printf("%-10s = 0x%x, \n", "MCAUSE", rv_cpu->csr[MCAUSE].value);
+    printf("%-10s = 0x%x, \n", "MTVAL", rv_cpu->csr[MTVAL].value);
+    printf("%-10s = 0x%x, \n", "MIP", rv_cpu->csr[MIP].value);
+    printf("%-10s = 0x%x, \n", "MHARTID", rv_cpu->csr[MHARTID].value);
+}
+

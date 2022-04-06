@@ -22,4 +22,4 @@ check:
 	riscv32-unknown-linux-gnu-objcopy -O binary test/add.obj test/add.bin
 
 clean:
-	rm src/*.o rv_emu test/*.obj test/*.bin
+	rm src/*.o rv_emu

@@ -33,6 +33,8 @@ rv_emu_t *init_rv_emu();
 /* Load the risc-v executable file to emulator memory */
 int32_t load_rv_elf(rv_emu_t *rv_emu, uint8_t *filename);
 
+int32_t tick(rv_emu_t *rv_emu);
+
 // TODO : destroy emulator, free mem ....
 
 #endif 

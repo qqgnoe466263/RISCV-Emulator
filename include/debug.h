@@ -3,12 +3,16 @@
 
 #include <stdio.h>
 
-#define CONFIG_DBG  1
+#define ENOMEM  12      /* Out of memory */
+#define EACCES  13      /* Permission denied */
+#define EFAULT  14      /* Bad address */
+
+#define CONFIG_DBG  0
 #define ERROR       1
 
 #define ERR(...) fprintf(stdout, __VA_ARGS__);
 
-#ifdef CONFIG_DBG
+#if CONFIG_DBG
 #define DBG(...) fprintf(stdout, __VA_ARGS__);
 #else
 #define DBG(...);

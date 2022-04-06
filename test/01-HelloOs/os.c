@@ -17,6 +17,6 @@ void lib_puts(char *s) {
 int os_main(void)
 {
 	lib_puts("Hello OS!\n");
-	while (1) {}
+	//while (1) {}
 	return 0;
 }
